@@ -18,12 +18,12 @@ const userSchema = new schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Rating'
     }],
-    searched: [searchedSchema]
+    searches: [searchSchema]
 }, {
     timestamps: true
 });
 
-const searchedSchema = new schema({
+const searchSchema = new schema({
     cuisine: [{ type: String }],
     diet: [{ type: String }],
     intolerances: [{ type: String }],

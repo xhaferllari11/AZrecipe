@@ -3,7 +3,7 @@
 
 
 some user profile
-<h1>Hello <%= u.name%></h1>
+<h1>Hello, <%= (u) ? u.name : 'please log in'%></h1>
 
 
 <%- include('./partials/footer') %>

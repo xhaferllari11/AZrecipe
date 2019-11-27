@@ -1,0 +1,105 @@
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
+
+<form class="new-recipe" action="/user/recipes/new" method="POST">
+    <hr>
+    <!-- will eventually put a for loop here for the preselected patterns unless the use is new  -->
+    <label>Diet: </label>
+    <select name="diet">
+        <option selected disabled>Select Diet</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+    </select>
+    <hr>
+    <label>Select Cuisine: </label>
+    <div class="row">
+        <div class="col">
+            <div>
+                <input type="checkbox" name="cuisine"> African
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> American
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> British
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Cajun
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Caribbean
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Chinese
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Eastern European
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> European
+            </div>
+        </div>
+
+        <div class="col">
+            <div>
+                <input type="checkbox" name="cuisine"> French
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> German
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Greek
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Indian
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Irish
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Italian
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Japanese
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Jewish
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <input type="checkbox" name="cuisine"> Korean
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Latin American
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Mediterranean
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Mexican
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Middle Eastern
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Spanish
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Thai
+            </div>
+            <div>
+                <input type="checkbox" name="cuisine"> Vietnamese
+            </div>
+        </div>
+    </div>
+    <hr>
+
+</form>
+
+
+
+
+
+<%- include('../partials/footer') %>

@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+form.new-recipe {
+  padding: 0 20%;
+}
+
+form.new-recipe div.row div.col {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
+const searchSchema = new schema({
+    cuisine: [{ type: String }],
+    diet: { type: String },
+    intolerances: [{ type: String }],
+    mealType: [{ type: String }],
+    offset: { type: Number },
+    numResults: { type: Number }
+}, {
+    timestamps: true
+});
+
 const userSchema = new schema({
     googleId: { type: String },
     name: { type: String },
@@ -23,16 +34,6 @@ const userSchema = new schema({
     timestamps: true
 });
 
-const searchSchema = new schema({
-    cuisine: [{ type: String }],
-    diet: [{ type: String }],
-    intolerances: [{ type: String }],
-    mealType: [{ type: String }],
-    offset: { type: Number },
-    numResults: { type: Number }
-}, {
-    timestamps: true
-});
 
 
 module.exports = mongoose.model('User', userSchema)

@@ -11,7 +11,26 @@ form.new-recipe {
   padding: 0 20%;
 }
 
-form.new-recipe div.row div.col {
+form.new-recipe div.cuisine-selection {
+  height: 150px;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  align-content: stretch;
+}
+
+form.new-recipe div.intolerances {
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: stretch;
+
+}
+
+form.new-recipe div.meal-type {
+  height: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }

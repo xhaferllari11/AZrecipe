@@ -7,7 +7,7 @@ const ingredientSchema = new schema({
     unit: String,
     name: String,
     originalString: String,
-    img: String
+    image: String
 }, { timestamps: true })
 
 const recipeSchema = new schema({

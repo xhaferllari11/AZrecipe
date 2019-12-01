@@ -3,17 +3,18 @@
 //however, i am setting up code so user is able to change preferences/intolerances/meals
 //over time
 
-const User = require('../models/user');
+const User = require('../models/User');
+const Recipe = require('../models/recipe');
 const request = require('request');
 require('dotenv').config();
 
 
-const recipesPerCall = 2;
+const recipesPerCall = 1;
 const spBase = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=${recipesPerCall}&instructionsRequired=true&fillIngredients=true&addRecipeInformation=true`
 
 
 function showNew(req, res, next) {
-    res.render('recipes/new', { u: req.user });
+    res.render('recipes/new', { u: req.user, e: null });
 }
 
 function getNewRecipes(req, res, next) {
@@ -22,9 +23,7 @@ function getNewRecipes(req, res, next) {
     recipeReq.intolerances = getArrayReq(req.body.intolerances);
     recipeReq.mealType = getArrayReq(req.body.meal);
 
-    //need to have if statement to check if this was searched before
-    //then update, or if not, create new search
-
+    //checks if same request was made previously and updates offset
     let searched = findSearch(req.user, recipeReq);
     if (searched) {
         recipeReq.offset = [searched.offset];
@@ -38,10 +37,32 @@ function getNewRecipes(req, res, next) {
     }
     console.log(APIReqURL);
     request(reqOptions, function (err, response, body) {
-        if (err) { console.log(err); }
-        console.log(JSON.parse(body));
+        if (err) {
+            console.log(e)
+            res.render('recipes/new', { u: req.user, e });
+        };
         rawRecipes = JSON.parse(body);
-        recipe = convertToSchema(rawRecipes);
+        recipes = convertToSchema(rawRecipes);
+        let recipe = new Recipe(recipes[0]);
+        recipe.save(function (e, r) {
+            if (e) {
+                console.log(e)
+                res.render('recipes/new', { u: req.user, e });
+            };
+            console.log('savedddddd', r);
+            console.log('userID', req.user._id)
+            User.findById(req.user._id).exec(function (e, u) {
+                console.log(u);
+                console.log(req.user._id);
+                recipeReq.offset = recipeReq.offset[0];
+                u.searches.push(recipeReq);
+                u.currRecipes = [];
+                u.currRecipes.push(r);
+                console.log('pushed to user');
+                u.save();
+            });
+        })
+
     });
 
     res.redirect('/user/recipes/new');
@@ -77,13 +98,17 @@ function getReqURL(reqField) {
         } else if (reqField[option].length) {
             reqURL = `${reqURL}&${option}=`
             for (let i = 0; i < reqField[option].length; i++) {
-                reqURL = `${reqURL}${reqField[option][i]},`
+                reqURL = `${reqURL}${reqField[option][i]}`
+                if (i !== reqField[option].length - 1) {
+                    reqURL = reqURL + ',';
+                }
             }
         }
     }
     return reqURL;
 }
 
+//uses the find method in array to find searches before, not the mongoose find
 function findSearch(u, searchParameters) {
     User.find({ _id: u._id }, function (err, user) {
         if (user.searches) {
@@ -98,5 +123,17 @@ function findSearch(u, searchParameters) {
 }
 
 function convertToSchema(rawR) {
-    
+    console.log(rawR)
+    rawR.results.forEach(r => {
+        r.spoontacularId = r.id;
+        r.instructions = [];
+        r.analyzedInstructions[0].steps.forEach(s => {
+            r.instructions.push(s.step);
+        });
+        r.ingredients = r.missedIngredients;
+        r.ingredients.forEach(ing => {
+            ing.spoontacularIngredientId = ing.id;
+        })
+    });
+    return rawR.results;
 }

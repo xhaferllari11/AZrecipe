@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const Fakeuser = require('../models/fakeUser');
+const User = require('../models/User');
 
 
 passport.use(new GoogleStrategy({
@@ -9,12 +9,12 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK
 },
     function (accessToken, refreshToken, profile, done) {
-        Fakeuser.findOne({ googleId: profile.id }, function (e, u) {
+        User.findOne({ googleId: profile.id }, function (e, u) {
             if (e) { return done(e); }
             if (u) {
                 return done(null, u);
             } else {
-                var newUser = new Fakeuser({
+                var newUser = new User({
                     name: profile.displayName,
                     email: profile.emails[0].value,
                     googleId: profile.id
@@ -32,7 +32,7 @@ passport.serializeUser(function (u, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    Fakeuser.findById(id, function (err, u) {
+    User.findById(id, function (err, u) {
         done(err, u);
     });
 });

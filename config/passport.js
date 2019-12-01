@@ -9,7 +9,6 @@ passport.use(new GoogleStrategy({
     callbackURL: process.env.GOOGLE_CALLBACK
 },
     function (accessToken, refreshToken, profile, done) {
-        console.log(profile);
         Fakeuser.findOne({ googleId: profile.id }, function (e, u) {
             if (e) { return done(e); }
             if (u) {

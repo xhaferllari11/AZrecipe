@@ -6,8 +6,7 @@ const searchSchema = new schema({
     diet: { type: String },
     intolerances: [{ type: String }],
     mealType: [{ type: String }],
-    offset: { type: Number },
-    numResults: { type: Number }
+    offset: { type: Number }
 }, {
     timestamps: true
 });
@@ -33,7 +32,6 @@ const userSchema = new schema({
 }, {
     timestamps: true
 });
-
 
 
 module.exports = mongoose.model('User', userSchema)

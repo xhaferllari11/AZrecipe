@@ -1,17 +1,19 @@
 <%- include('../partials/header') %>
 <%- include('../partials/nav') %>
+<h5><%= u %></h5>
 
+<h5>Select your preferences for recipes. These will not be able to be updated on further requests so be inclusive. Functionality for updates will come later on.</h5>
 <form class="new-recipe" action="/user/recipes/new" method="POST">
     <hr>
     <!-- will eventually put a for loop here for the preselected patterns unless the use is new  -->
     <label>Diet: </label>
     <select name="diet" required>
-        <option selected value="" disabled>Select Diet</option>
+        <option value="" disabled>Select Diet</option>
         <option value="Gluten Free">Gluten Free</option>
         <option value="Ketogenic">Ketogenic</option>
         <option value="Vegetarian">Vegetarian</option>
         <option value="Vegan">Vegan</option>
-        <option value="Pescetarian">Pescetarian</option>
+        <option selected value="Pescetarian">Pescetarian</option>
         <option value="Paleo">Paleo</option>
         <option value="Whole30">Whole30</option>
     </select>
@@ -19,10 +21,10 @@
     <label><strong>Select Cuisines </strong> (prepopulated with previous prefereces, suggest you keep the same): </label>
     <div class="cuisine-selection">
         <div>
-            <input type="checkbox" name="cuisine" value="African"> African
+            <input type="checkbox" checked name="cuisine" value="African"> African
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="American"> American
+            <input type="checkbox" checked name="cuisine" value="American"> American
         </div>
         <div>
             <input type="checkbox" name="cuisine" value="British"> British
@@ -37,7 +39,7 @@
             <input type="checkbox" name="cuisine" value="Chinese"> Chinese
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Eastern European"> Eastern European
+            <input type="checkbox" checked name="cuisine" value="Eastern European"> Eastern European
         </div>
         <div>
             <input type="checkbox" name="cuisine" value="European"> European
@@ -49,7 +51,7 @@
             <input type="checkbox" name="cuisine" value="German"> German
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Greek"> Greek
+            <input type="checkbox" checked name="cuisine" value="Greek"> Greek
         </div>
         <div>
             <input type="checkbox" name="cuisine" value="Indian"> Indian
@@ -73,22 +75,22 @@
             <input type="checkbox" name="cuisine" value="Latin America"> Latin American
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Mediterranean"> Mediterranean
+            <input type="checkbox" checked name="cuisine" value="Mediterranean"> Mediterranean
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Mexican"> Mexican
+            <input type="checkbox" checked name="cuisine" value="Mexican"> Mexican
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Middle Eastern"> Middle Eastern
+            <input type="checkbox" checked name="cuisine" value="Middle Eastern"> Middle Eastern
         </div>
         <div>
             <input type="checkbox" name="cuisine" value="Spanish"> Spanish
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Thai"> Thai
+            <input type="checkbox" checked name="cuisine" value="Thai"> Thai
         </div>
         <div>
-            <input type="checkbox" name="cuisine" value="Vietnamese"> Vietnamese
+            <input type="checkbox" checked name="cuisine" value="Vietnamese"> Vietnamese
         </div>
     </div>
     <hr>
@@ -139,7 +141,7 @@
             <input type="checkbox" name="meal" value="Main Course" checked> Main Course
         </div>
         <div>
-            <input type="checkbox" name="meal" value="Soup"> Soup
+            <input type="checkbox" name="meal" value="Soup" checked> Soup
         </div>
         <div>
             <input type="checkbox" name="meal" value="Dessert"> Dessert
@@ -149,6 +151,9 @@
     <button type="submit" class="btn btn-primary mb-2">Get Recipes</button>
 </form>
 
+
+
+<p>Pesto Salmon and Italian Veggies in Foil might be a good recipe to expand your main course recipe box. One serving contains <b>396 calories</b>, <b>38g of protein</b>, and <b>20g of fat</b>. This gluten free, dairy free, paleolithic, and primal recipe serves 4 and costs <b>$6.19 per serving</b>. Many people made this recipe, and 757517 would say it hit the spot. If you have olive oil, salmon fillets, lemon juice, and a few other ingredients on hand, you can make it. From preparation to the plate, this recipe takes around <b>45 minutes</b>. It is an <b>expensive</b> recipe for fans of Mediterranean food. It is brought to you by Cooking Classy. Overall, this recipe earns an <b>amazing spoonacular score of 100%</b>. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/pesto-salmon-and-italian-veggies-in-foil-884531\">Pesto Salmon and Italian Veggies in Foil</a>, <a href=\"https://spoonacular.com/recipes/pesto-salmon-and-italian-veggies-in-foil-959299\">Pesto Salmon and Italian Veggies in Foil</a>, and <a href=\"https://spoonacular.com/recipes/salmon-and-summer-veggies-in-foil-987511\">Salmon and Summer Veggies in Foil</a>.</p>
 
 
 

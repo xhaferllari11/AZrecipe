@@ -18,10 +18,12 @@ function showNew(req, res, next) {
 }
 
 function index(req, res, next) {
+    let fieldHandler = (req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes';
     User.findById(req.user._id)
-        .populate((req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes')
+        .populate(fieldHandler)
         .exec(function (e, u) {
-            res.render('recipes/index', { u, page: req.params.currpre });
+            
+            res.render('recipes/index', { u, page: fieldHandler });
         })
 }
 

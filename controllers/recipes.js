@@ -22,65 +22,49 @@ function getNewRecipes(req, res, next) {
     recipeReq.cuisine = getArrayReq(req.body.cuisine);
     recipeReq.intolerances = getArrayReq(req.body.intolerances);
     recipeReq.mealType = getArrayReq(req.body.meal);
-    
+
     //checks if same request was made previously and updates offset
+    //currently findSeach function only updates if user seaches is populated
     let searched = findSearch(req.user, recipeReq);
-    console.log(7,searched);
     if (searched) {
-        recipeReq.offset = [searched.offset];
+        recipeReq.offset = searched;
     } else {
-        recipeReq.offset = [0];
+        recipeReq.offset = 0;
     }
-    
+
     let APIReqURL = getReqURL(recipeReq);
-    let reqOptions = {
-        url: APIReqURL
-    }
-    console.log(1, APIReqURL);
-    
-    //populate old recipes and empty new recipes array
-    User.findById(req.user._id, function (e, u) {
-        console.log(5,u)
-        if (u.currRecipes.length>0) {
-            console.log('entere');
-            u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
-            u.currRecipes = [];
-        }
-        u.save();
-        console.log(6,u);
-    });
-    
+    let reqOptions = { url: APIReqURL }
+    console.log(APIReqURL);
+
     request(reqOptions, function (err, response, body) {
         if (err) {
-            console.log(e)
             res.render('recipes/new', { u: req.user, e });
         };
         rawRecipes = JSON.parse(body);
         recipes = convertToSchema(rawRecipes);
-        let recipe = new Recipe(recipes[0]);
-        recipe.save(function (e, r) {
-            if (e) {
-                console.log(e)
-                res.render('recipes/new', { u: req.user, e });
-            };
-            console.log(3, r);
-            console.log('userID', req.user._id)
-            User.findById(req.user._id).exec(function (e, u) {
-                console.log(u);
-                console.log(req.user._id);
-                recipeReq.offset = recipeReq.offset[0];
-                u.searches.push(recipeReq);
-                u.currRecipes = [];
-                u.currRecipes.push(r);
-                console.log('pushed to user');
-                u.save();
-            });
-        })
+        User.findById(req.user._id)
+        .exec(function (e,u){
+            recipeReq.offset = recipeReq.offset + rawRecipes.number;
 
+                //command if new searches allowed: u.searches.push(recipeReq);
+            //populte old recipes arr with recipes cooked last week
+            u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
+            u.currRecipes = [];
+            //saves each recipe to database
+            recipes.forEach(function(recipe){
+                let r = new Recipe(recipe);
+                r.save(function(e){
+                    if (e) {console.log(111, e);};
+                });
+                u.currRecipes.push(r);
+            });
+            u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+            u.save();
+        });
     });
 
     res.redirect('/user/recipes/new');
-}
+};
 
 module.exports = {
     showNew,
@@ -109,6 +93,8 @@ function getReqURL(reqField) {
     for (let option in reqField) {
         if (option === 'diet') {
             reqURL = `${reqURL}&diet=${reqField['diet']}`
+        } else if (option === 'offset') {
+            reqURL = `${reqURL}&offset=${reqField['offset']}`
         } else if (reqField[option].length) {
             reqURL = `${reqURL}&${option}=`
             for (let i = 0; i < reqField[option].length; i++) {
@@ -122,25 +108,18 @@ function getReqURL(reqField) {
     return reqURL;
 }
 
-//uses the find method in array to find searches before, not the mongoose find
+//finds if similar search was made before and gives offset to update
+//currently user is not allowed to update search methods because finding
+//old searches would take too many for loops. will update later
 function findSearch(u, searchParameters) {
     User.findById(u._id, function (err, user) {
-        console.log(9,searchParameters);
-        console.log(10,user.searches);        
-        if (user.searches.length>0) {
-            console.log(8, )
-            return user.searches.find(function (s) {
-                s.cuisine.sort() == searchParameters.cuisine.sort() &&
-                    s.intolerances.sort() == searchParameters.intolerances.sort() &&
-                    s.mealType.sort() == searchParameters.mealType.sort() &&
-                    s.diet == searchParameters.diet
-            });
+        if (user.searches.length > 0) {
+            return user.searches[0].offset;
         } else { return undefined }
     })
 }
 
 function convertToSchema(rawR) {
-    console.log(2, rawR)
     rawR.results.forEach(r => {
         r.spoontacularId = r.id;
         r.instructions = [];
@@ -150,7 +129,7 @@ function convertToSchema(rawR) {
         r.ingredients = r.missedIngredients;
         r.ingredients.forEach(ing => {
             ing.spoontacularIngredientId = ing.id;
-        })
+        });
     });
     return rawR.results;
-}
+};

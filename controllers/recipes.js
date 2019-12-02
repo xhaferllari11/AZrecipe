@@ -9,7 +9,7 @@ const request = require('request');
 require('dotenv').config();
 
 
-const recipesPerCall = 1;
+const recipesPerCall = 2;
 const spBase = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=${recipesPerCall}&instructionsRequired=true&fillIngredients=true&addRecipeInformation=true`
 
 
@@ -48,16 +48,26 @@ function getNewRecipes(req, res, next) {
             //populte old recipes arr with recipes cooked last week
             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
             u.currRecipes = [];
+
             //saves each recipe to database
             recipes.forEach(function (recipe) {
-                let r = new Recipe(recipe);
-                r.save(function (e, rec) {
-                    if (e) { console.log(111, e); };
-                    console.log(rec);
-                });
-                u.currRecipes.push(r);
+                //if recipe already in my db, change reference to that
+                //instead of saving new recipe
+                Recipe.findOne({ spoontacularId: recipe.spoontacularId })
+                    .exec(function (e, r) {
+                        if (r) {
+                            u.currRecipes.push(r);
+                        } else {
+                            let r = new Recipe(recipe);
+                            r.save(function (e, rec) {
+                                if (e) { console.log(111, e); };
+                                u.currRecipes.push(rec);
+                            });
+                        };
+                    });
             });
             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+            console.log(u.searches.offset);
             if (u.searches.length < 1) { u.searches.push(recipeReq); };
             console.log(1, recipes[0].id);
             u.save();

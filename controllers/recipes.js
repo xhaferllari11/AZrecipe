@@ -50,7 +50,7 @@ function getNewRecipes(req, res, next) {
     //old searches would take too many for loops. Will update later
     User.findById(req.user._id, function (e, u) {
         if (u.searches.length > 0) {
-            recipeReq.offset = u.searches[0].offset
+            recipeReq.offset = u.searches[0].offset;
         } else {
             recipeReq.offset = 0;
         }
@@ -87,27 +87,20 @@ function getNewRecipes(req, res, next) {
             Recipe.bulkWrite(bulkWriteArr)
             .then(result => {
                 console.log(result);
+                //updates current recipes with  new ones.
+                //NOTE: if recipe already existed in database from another user it will not update
+                //but can be found using matchedCount
+                console.log(Object.values(result.upsertedIds));
+                var la = Object.values(result.upsertedIds);
+                console.log(typeof(la[0]));
+                u.currRecipes = Object.values(result.upsertedIds);
+                u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+                if (u.searches.length < 1) { u.searches.push(recipeReq); };
+                u.save();
+                res.redirect('/user/recipes/current');
             });
-
-            // Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
-            //     if (r) {
-            //         u.currRecipes.push(r);
-            //     } else {
-            //         let r = new Recipe(recipe);
-            //         r.save(function (e, rec) {
-            //             if (e) { console.log(111, e); };
-            //             u.currRecipes.push(rec);
-            //         });
-            //     };
-            // });
-            // });
-            u.searches[0].offset = recipeReq.offset + rawRecipes.number;
-            if (u.searches.length < 1) { u.searches.push(recipeReq); };
-            //will need to change this to include promises, development only
-            u.save();
         });
     });
-    res.redirect('/user/recipes/new');
 };
 
 

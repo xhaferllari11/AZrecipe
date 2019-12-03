@@ -54,16 +54,23 @@
                     <hr>
 
                     <form action="/user/recipes/<%= pg %>/<%= r._id %>" method="POST">
-                        <fieldset class="rating">
-                                <legend>Please rate:</legend>
-                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Rocks!">5 stars</label>
-                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
-                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
-                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kinda bad">2 stars</label>
-                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
-                            </fieldset>
-                            <input type="text" name="comment" style="clear: both; overflow: auto;">
-                        <a href="#" class="btn btn-success">Leave a Review</a>
+                        <p>
+                            Rating:
+                            <span class="starRating">
+                                <input id="rating5" type="radio" name="rating" value="5">
+                                <label for="rating5">5</label>
+                                <input id="rating4" type="radio" name="rating" value="4">
+                                <label for="rating4">4</label>
+                                <input id="rating3" type="radio" name="rating" value="3" checked>
+                                <label for="rating3">3</label>
+                                <input id="rating2" type="radio" name="rating" value="2">
+                                <label for="rating2">2</label>
+                                <input id="rating1" type="radio" name="rating" value="1">
+                                <label for="rating1">1</label>
+                            </span>
+                        </p>
+                        <input type="text" name="comment" style="clear: both; overflow: auto;">
+                        <button type="submit" class="btn btn-success btn-inline-block">Save Rating</button>
                     </form>
                 </div>
             </div>

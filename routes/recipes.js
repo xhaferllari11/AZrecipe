@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const recipeCtrl = require('../controllers/recipes');
+const ratingCtrl = require('../controllers/ratings');
 
 router.get('/new', isLoggedIn, recipeCtrl.showNew);
 router.post('/new', isLoggedIn, recipeCtrl.create);
 
 router.get('/:currpre', isLoggedIn, recipeCtrl.index);
 router.get('/:currpre/:recId', isLoggedIn, recipeCtrl.show);
+router.post('/:currpre/:recId', isLoggedIn, ratingCtrl.create);
 
 
 function isLoggedIn(req, res, next) {

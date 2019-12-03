@@ -2,12 +2,13 @@
 <%- include('../partials/nav') %>
 <h1><%= page%> recipes</h1>
 
+<% var pg = (page == 'currRecipes') ? 'current' : 'previous' %>
 <div style="display: flex; flex-wrap: wrap;">
     <% u[page].forEach(function(r){ %>
     <div class="card" style="max-width: 400px; margin: 2%">
         <img class="card-img-top" src="<%= r.image%>" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title"><a href="/user/recipes/<%=page%>/<%= r._id%>"><%= r.title%> </a></h5>
+            <h5 class="card-title"><a href="/user/recipes/<%=pg%>/<%= r._id%>"><%= r.title%> </a></h5>
             <p class="card-text">Description</p>
         </div>
         <div class="card-footer">

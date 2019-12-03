@@ -6,6 +6,7 @@ router.get('/new', isLoggedIn, recipeCtrl.showNew);
 router.post('/new', isLoggedIn, recipeCtrl.create);
 
 router.get('/:currpre', isLoggedIn, recipeCtrl.index);
+router.get('/:currpre/:recId', isLoggedIn, recipeCtrl.show);
 
 
 function isLoggedIn(req, res, next) {

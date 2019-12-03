@@ -27,6 +27,13 @@ function index(req, res, next) {
         })
 }
 
+function show(req,res,next){
+    let fieldHandler = (req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes';
+    Recipe.findById(req.params.recId, function(e,r){
+        res.render('recipes/show', {u: req.user , page: fieldHandler, r});
+    });
+}
+
 function getNewRecipes(req, res, next) {
     //converts API request inputs to arrays
     let recipeReq = { diet: req.body.diet };
@@ -86,7 +93,8 @@ function getNewRecipes(req, res, next) {
 module.exports = {
     showNew,
     create: getNewRecipes,
-    index
+    index,
+    show
 }
 
 

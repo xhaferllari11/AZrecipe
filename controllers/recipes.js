@@ -3,7 +3,7 @@
 //however, i am setting up code so user is able to change preferences/intolerances/meals
 //over time
 
-const User = require('../models/User');
+const User = require('../models/user');
 const Recipe = require('../models/recipe');
 const request = require('request');
 require('dotenv').config();
@@ -83,7 +83,7 @@ function getNewRecipes(req, res, next) {
             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
             if (u.searches.length < 1) { u.searches.push(recipeReq); };
             //will need to change this to include promises, development only
-            setTimeout(() => u.save(), 1000);
+            setTimeout(() => u.save(), 2000);
         });
     });
     res.redirect('/user/recipes/new');

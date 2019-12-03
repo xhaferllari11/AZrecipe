@@ -1,11 +1,11 @@
 <%- include('../partials/header') %>
 <%- include('../partials/nav') %>
-<h5><%= u %></h5>
+
 <% if (e) { %>
     <h5>Spoontacular API sent back the following error:</h5>
     <h6><%= e.message %></h6>
 <% } %>
-<h5>Select your preferences for recipes. These will not be able to be updated on further requests so be inclusive. Functionality for updates will come later on.</h5>
+<h5>Select your preferences for recipes. If you've made previous requests, we have pre-populated the selections for you.</h5>
 <form class="new-recipe" action="/user/recipes/new" method="POST">
     <hr>
     <!-- will eventually put a for loop here for the preselected patterns unless the use is new  -->
@@ -97,7 +97,7 @@
         </div>
     </div>
     <hr>
-    <label>Select Any Intolerances: </label>
+    <label>Intolerances: </label>
 
     <div class="intolerances">
         <div>

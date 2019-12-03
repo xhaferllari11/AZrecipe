@@ -1,14 +1,12 @@
 <%- include('../partials/header') %>
 <%- include('../partials/nav') %>
 
+<% var pg = (page == 'currRecipes') ? 'current' : 'previous' %>
+
 <!-- Page Content -->
 <div class="container">
-
     <div class="row">
-
-
         <div class="col-lg-9">
-
             <div class="card mt-4">
                 <img class="card-img-top img-fluid" src="<%= r.image %>" alt="">
                 <div class="card-body">
@@ -33,7 +31,6 @@
                     Ingredients
                 </div>
                 <div class="card-body">
-
                     <ul class="list-group">
                         <% r.ingredients.forEach(function(i){ %>
                         <li class="list-group-item"><%= i.originalString %></li>
@@ -55,7 +52,19 @@
                     </ol>
                     <small class="text-muted">Posted by Anonymous on 3/1/17</small>
                     <hr>
-                    <a href="#" class="btn btn-success">Leave a Review</a>
+
+                    <form action="/user/recipes/<%= pg %>/<%= r._id %>" method="POST">
+                        <fieldset class="rating">
+                                <legend>Please rate:</legend>
+                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Rocks!">5 stars</label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kinda bad">2 stars</label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
+                            </fieldset>
+                            <input type="text" name="comment" style="clear: both; overflow: auto;">
+                        <a href="#" class="btn btn-success">Leave a Review</a>
+                    </form>
                 </div>
             </div>
             <!-- /.card -->

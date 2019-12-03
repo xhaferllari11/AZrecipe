@@ -2,8 +2,58 @@
 <%- include('./partials/nav') %>
 
 
-some user profile
+
 <h1>Hello, <%= (u) ? u.name : 'please log in'%></h1>
 
+<!-- Page Content -->
+<div class="dashboard-ingredients-display">
+
+    <section>
+            <h5 class="my-4">This weeks recipes</h5>
+
+            <% u.currRecipes.forEach(function(r){ %>
+        <div class="card card-outline-secondary my-4">
+            <div class="card-header">
+                <%= r.title %>    
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <% r.ingredients.forEach(function(i){ %>
+                    <li class="list-group-item"><%= i.originalString %></li>
+                    <%  }) %>
+                </ul>
+                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+            </div>
+        </div>
+        <% }) %>
+    </section>
+
+    <section>
+        <div class="container">
+            <!-- Page Heading -->
+            <h5 class="my-4">This weeks recipes</h5>
+            <hr>
+            <% u.currRecipes.forEach(function(r){ %>
+            <!-- Project One -->
+            <div class="row">
+                <div class="col-md-7">
+                    <a href="/user/recipes/current/<%=r._id%>">
+                        <img class="img-fluid rounded mb-2 mb-md-0" src="<%= r.image %>" alt="">
+                    </a>
+                </div>
+                <div class="col-md-5">
+                    <h3><%= r.title %></h3>
+                    <p></p>
+                    <a class="btn btn-primary" href="/user/recipes/current/<%=r._id%>">View Recipe</a>
+                </div>
+            </div>
+            <!-- /.row -->
+            <hr>
+            <% }) %>
+
+        </div>
+    </section>
+
+</div>
 
 <%- include('./partials/footer') %>

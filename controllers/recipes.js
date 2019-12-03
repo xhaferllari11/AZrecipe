@@ -33,6 +33,10 @@ function show(req, res, next) {
     });
 }
 
+
+
+
+
 function getNewRecipes(req, res, next) {
     //converts API request inputs to arrays
     let recipeReq = { diet: req.body.diet };
@@ -64,30 +68,104 @@ function getNewRecipes(req, res, next) {
             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
             u.currRecipes = [];
 
+            let bulkWriteArr = []
+
             //saves each recipe to database
             recipes.forEach(function (recipe) {
                 //if recipe already in my db, change reference to that
                 //instead of saving new recipe
-                Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
-                    if (r) {
-                        u.currRecipes.push(r);
-                    } else {
-                        let r = new Recipe(recipe);
-                        r.save(function (e, rec) {
-                            if (e) { console.log(111, e); };
-                            u.currRecipes.push(rec);
-                        });
-                    };
-                });
+                let newRecObj = {
+                    updateOne: {
+                        filter: { spoonacularId: recipe.spoonacularId },
+                        update: { '$set': recipe },
+                        upsert: true
+                    }
+                }
+                bulkWriteArr.push(newRecObj);
             });
+            console.log(bulkWriteArr);
+            Recipe.bulkWrite(bulkWriteArr)
+            .then(result => {
+                console.log(result);
+            });
+
+            // Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
+            //     if (r) {
+            //         u.currRecipes.push(r);
+            //     } else {
+            //         let r = new Recipe(recipe);
+            //         r.save(function (e, rec) {
+            //             if (e) { console.log(111, e); };
+            //             u.currRecipes.push(rec);
+            //         });
+            //     };
+            // });
+            // });
             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
             if (u.searches.length < 1) { u.searches.push(recipeReq); };
             //will need to change this to include promises, development only
-            setTimeout(() => u.save(), 2000);
+            u.save();
         });
     });
     res.redirect('/user/recipes/new');
 };
+
+
+// function getNewRecipes(req, res, next) {
+//     //converts API request inputs to arrays
+//     let recipeReq = { diet: req.body.diet };
+//     recipeReq.cuisine = getArrayReq(req.body.cuisine);
+//     recipeReq.intolerances = getArrayReq(req.body.intolerances);
+//     recipeReq.mealType = getArrayReq(req.body.meal);
+
+//     //checks if same request was made previously and updates offset
+//     //finds if similar search was made before and gives offset to update
+//     //currently user is not allowed to update search methods because finding
+//     //old searches would take too many for loops. Will update later
+//     User.findById(req.user._id, function (e, u) {
+//         if (u.searches.length > 0) {
+//             recipeReq.offset = u.searches[0].offset
+//         } else {
+//             recipeReq.offset = 0;
+//         }
+//         //converts search parameter to API string
+//         let APIReqURL = getReqURL(recipeReq);
+//         let reqOptions = { url: APIReqURL }
+//         request(reqOptions, function (err, response, body) {
+//             if (err) {
+//                 res.render('recipes/new', { u: req.user, e });
+//             };
+//             rawRecipes = JSON.parse(body);
+//             //API returns a large object body and this function converts it to Schema
+//             recipes = convertToSchema(rawRecipes);
+//             //populte old recipes arr with recipes cooked last week
+//             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
+//             u.currRecipes = [];
+
+//             //saves each recipe to database
+//             recipes.forEach(function (recipe) {
+//                 //if recipe already in my db, change reference to that
+//                 //instead of saving new recipe
+//                 Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
+//                     if (r) {
+//                         u.currRecipes.push(r);
+//                     } else {
+//                         let r = new Recipe(recipe);
+//                         r.save(function (e, rec) {
+//                             if (e) { console.log(111, e); };
+//                             u.currRecipes.push(rec);
+//                         });
+//                     };
+//                 });
+//             });
+//             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+//             if (u.searches.length < 1) { u.searches.push(recipeReq); };
+//             //will need to change this to include promises, development only
+//             setTimeout(() => u.save(), 2000);
+//         });
+//     });
+//     res.redirect('/user/recipes/new');
+// };
 
 module.exports = {
     showNew,

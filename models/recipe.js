@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const ingredientSchema = new schema({
-    spoontacularIngredientId: Number,
+    spoonacularIngredientId: Number,
     amount: Number,
     unit: String,
     name: String,
@@ -11,11 +11,11 @@ const ingredientSchema = new schema({
 }, { timestamps: true })
 
 const recipeSchema = new schema({
-    sourceURL: String,
+    sourceUrl: String,
     aggregateLikes: String,
-    spoontacularScore: Number,
+    spoonacularScore: Number,
     healthScore: Number,
-    spoontacularId: Number,
+    spoonacularId: Number,
     title: String,
     readyInMinutes: Number,
     servings: Number,

@@ -22,15 +22,14 @@ function index(req, res, next) {
     User.findById(req.user._id)
         .populate(fieldHandler)
         .exec(function (e, u) {
-            
             res.render('recipes/index', { u, page: fieldHandler });
         })
 }
 
-function show(req,res,next){
+function show(req, res, next) {
     let fieldHandler = (req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes';
-    Recipe.findById(req.params.recId, function(e,r){
-        res.render('recipes/show', {u: req.user , page: fieldHandler, r});
+    Recipe.findById(req.params.recId, function (e, r) {
+        res.render('recipes/show', { u: req.user, page: fieldHandler, r });
     });
 }
 
@@ -69,7 +68,7 @@ function getNewRecipes(req, res, next) {
             recipes.forEach(function (recipe) {
                 //if recipe already in my db, change reference to that
                 //instead of saving new recipe
-                Recipe.findOne({ spoontacularId: recipe.spoontacularId }, function (e, r) {
+                Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
                     if (r) {
                         u.currRecipes.push(r);
                     } else {
@@ -84,7 +83,7 @@ function getNewRecipes(req, res, next) {
             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
             if (u.searches.length < 1) { u.searches.push(recipeReq); };
             //will need to change this to include promises, development only
-            setTimeout(()=> u.save(), 1000);
+            setTimeout(() => u.save(), 1000);
         });
     });
     res.redirect('/user/recipes/new');
@@ -136,14 +135,14 @@ function getReqURL(reqField) {
 //converts returned object recipe to schema type object
 function convertToSchema(rawR) {
     rawR.results.forEach(r => {
-        r.spoontacularId = r.id;
+        r.spoonacularId = r.id;
         r.instructions = [];
         r.analyzedInstructions[0].steps.forEach(s => {
             r.instructions.push(s.step);
         });
         r.ingredients = r.missedIngredients;
         r.ingredients.forEach(ing => {
-            ing.spoontacularIngredientId = ing.id;
+            ing.spoonacularIngredientId = ing.id;
         });
     });
     return rawR.results;

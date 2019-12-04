@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const ratingSchema = new schema({
-    rate: {
+    rating: {
         type: Number, 
         required: true,
         min: 0,

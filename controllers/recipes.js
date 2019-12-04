@@ -5,6 +5,7 @@
 
 const User = require('../models/user');
 const Recipe = require('../models/recipe');
+const Rating = require('../models/rating');
 const request = require('request');
 require('dotenv').config();
 
@@ -29,7 +30,17 @@ function index(req, res, next) {
 function show(req, res, next) {
     let fieldHandler = (req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes';
     Recipe.findById(req.params.recId, function (e, r) {
-        res.render('recipes/show', { u: req.user, page: fieldHandler, r });
+        User.findById(req.user._id, function(e,u){
+            ratingId = r.ratings.filter(element => u.ratings.includes(element));
+            console.log(2,ratingId);
+            if (ratingId.length) {
+                Rating.findById(ratingId[0], function(e,rat){
+                    res.render('recipes/show', { u, page: fieldHandler, r, rat });
+                });
+            } else {
+                res.render('recipes/show', { u, page: fieldHandler, r, rat: null });
+            }
+        });
     });
 }
 

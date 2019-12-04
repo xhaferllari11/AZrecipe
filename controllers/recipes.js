@@ -10,7 +10,7 @@ const request = require('request');
 require('dotenv').config();
 
 
-const recipesPerCall = 4;
+const recipesPerCall = 1;
 const spBase = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=${recipesPerCall}&instructionsRequired=true&fillIngredients=true&addRecipeInformation=true`
 
 

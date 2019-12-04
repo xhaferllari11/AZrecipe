@@ -15,7 +15,8 @@ const meals = {
     intolerances: ['Dairy','Egg','Gluten','Grain','Peanut','Seafood','Sesame','Shellfish','Soy','Sulfite','Tree nut','Wheat'],
     mealType: ['Main Course','Soup','Dessert']
 }
-const recipesPerCall = 1;
+const angjelaId = '5de815626d613a00173b960a';
+var recipesPerCall = 1;
 const spBase = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=${recipesPerCall}&instructionsRequired=true&fillIngredients=true&addRecipeInformation=true`
 
 
@@ -122,6 +123,7 @@ function show(req, res, next) {
 function getNewRecipes(req, res, next) {
     //converts API request inputs to arrays
     User.findById(req.user._id, function (e, u) {
+        recipesPerCall = (req.user._id == angjelaId) ? 7 : recipesPerCall;
         let recipeReq = {};
 
         //checks if same request was made previously and updates offset

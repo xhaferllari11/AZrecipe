@@ -53,13 +53,7 @@
                     <small class="text-muted">Posted by Anonymous on 3/1/17</small>
                     <hr>
 
-                    <form action="/user/recipes/<%= pg %>/<%= r._id %>" method="POST">
-
-
-
-
-
-
+                    <form action= "/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=PUT":"" %>" method="POST">
                         <p>
                             <% if (rat) { %>
                             Update rating:
@@ -84,7 +78,7 @@
 
                     <p style="margin-top: 5%;">
                         <% if (rat) { %>
-                        Your current rating:
+                        <strong>Your current rating:</strong> 
                         <span class="starRating">
                             <% for (let i=5; i>0; i--) { %>
                             <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>"
@@ -92,7 +86,7 @@
                             <label for="rating<%=i%>"><%=i%></label>
                             <% } %>
                         </span>
-                        <span><%=rat.comment%></span>
+                        <span><div><%=rat.comment%></div> </span>
                         <% } %>
                     </p>
                 </div>

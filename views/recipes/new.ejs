@@ -2,164 +2,65 @@
 <%- include('../partials/nav') %>
 
 <section style="color: white;">
-<% if (e) { %>
+    <% if (e) { %>
     <h5>Spoontacular API sent back the following error:</h5>
     <h6><%= e.message %></h6>
-<% } %>
-<h5>Select your preferences for recipes. If you've made previous requests, we have pre-populated the selections for you.</h5>
-<form class="new-recipe" action="/user/recipes/new" method="POST">
-    <hr>
-    <!-- will eventually put a for loop here for the preselected patterns unless the use is new  -->
-    <label>Diet: </label>
-    <select name="diet" required>
-        <option value="" disabled>Select Diet</option>
-        <option value="Gluten Free">Gluten Free</option>
-        <option value="Ketogenic">Ketogenic</option>
-        <option value="Vegetarian">Vegetarian</option>
-        <option value="Vegan">Vegan</option>
-        <option selected value="Pescetarian">Pescetarian</option>
-        <option value="Paleo">Paleo</option>
-        <option value="Whole30">Whole30</option>
-    </select>
-    <hr>
-    <label><strong>Select Cuisines </strong> (prepopulated with previous prefereces, suggest you keep the same): </label>
-    <div class="cuisine-selection">
-        <div>
-            <input type="checkbox" checked name="cuisine" value="African"> African
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="American"> American
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="British"> British
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Cajun"> Cajun
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Caribbean"> Caribbean
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Chinese"> Chinese
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Eastern European"> Eastern European
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="European"> European
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="French"> French
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="German"> German
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Greek"> Greek
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Indian"> Indian
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Irish"> Irish
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Italian"> Italian
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Japanese"> Japanese
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Jewish"> Jewish
-        </div>
-        <div>
-            <input type="checkbox" name="cuisine" value="Korean"> Korean
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Latin America"> Latin American
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Mediterranean"> Mediterranean
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Mexican"> Mexican
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Middle Eastern"> Middle Eastern
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Spanish"> Spanish
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Thai"> Thai
-        </div>
-        <div>
-            <input type="checkbox" checked name="cuisine" value="Vietnamese"> Vietnamese
-        </div>
-    </div>
-    <hr>
-    <label>Intolerances: </label>
+    <% } %>
+    <h5>Select your preferences for recipes. If you've made previous requests, we have pre-populated the selections for
+        you.</h5>
+    <form class="new-recipe" action="/user/recipes/new" method="POST">
+        <hr>
+        <label>Diet: </label>
+        <select name="diet" required>
+            <option value="" disabled>Select Diet</option>
+            <% m.diet.forEach(function(d){ %>
+            <option <% if (u.searches.length) { %> <%= (d == u.searches[0].diet) ? "selected" : "" %> <% } %>
+                value="<%=d%>"><%=d%>
+            </option>
+            <% }) %>
+        </select>
+        <hr>
 
-    <div class="intolerances">
-        <div>
-            <input type="checkbox" name="intolerances" value="Dairy"> Dairy
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Egg"> Egg
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Gluten"> Gluten
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Grain"> Grain
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Peanut"> Peanut
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Seafood"> Seafood
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Sesame"> Sesame
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Shellfish"> Shellfish
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Soy"> Soy
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Sulfite"> Sulfite
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Tree Nut"> Tree Nut
-        </div>
-        <div>
-            <input type="checkbox" name="intolerances" value="Wheat"> Wheat
-        </div>
-    </div>
-    <hr>
-    <label>Meal Type: </label>
-    <div class="meal-type">
-        <div>
-            <input type="checkbox" name="meal" value="Main Course" checked> Main Course
-        </div>
-        <div>
-            <input type="checkbox" name="meal" value="Soup" checked> Soup
-        </div>
-        <div>
-            <input type="checkbox" name="meal" value="Dessert"> Dessert
-        </div>
-    </div>
-    <hr>
-    <button type="submit" class="btn btn-primary mb-2">Get Recipes</button>
-</form>
+        <label><strong>Select Cuisines </strong></label>
+        <div class="cuisine-selection">
+            <% m.cuisines.forEach(function(c){ %>
 
+            <div>
+                <input type="checkbox" <% if (u.searches.length) { %>
+                    <%= (u.searches[0].cuisine.includes(c)) ? 'checked' : '' %> <% } %> name="cuisine" value="<%= c %>">
+                <%= c %>
+            </div>
 
+            <% }) %>
+        </div>
+        <hr>
 
-<p>Pesto Salmon and Italian Veggies in Foil might be a good recipe to expand your main course recipe box. One serving contains <b>396 calories</b>, <b>38g of protein</b>, and <b>20g of fat</b>. This gluten free, dairy free, paleolithic, and primal recipe serves 4 and costs <b>$6.19 per serving</b>. Many people made this recipe, and 757517 would say it hit the spot. If you have olive oil, salmon fillets, lemon juice, and a few other ingredients on hand, you can make it. From preparation to the plate, this recipe takes around <b>45 minutes</b>. It is an <b>expensive</b> recipe for fans of Mediterranean food. It is brought to you by Cooking Classy. Overall, this recipe earns an <b>amazing spoonacular score of 100%</b>. If you like this recipe, take a look at these similar recipes: <a href=\"https://spoonacular.com/recipes/pesto-salmon-and-italian-veggies-in-foil-884531\">Pesto Salmon and Italian Veggies in Foil</a>, <a href=\"https://spoonacular.com/recipes/pesto-salmon-and-italian-veggies-in-foil-959299\">Pesto Salmon and Italian Veggies in Foil</a>, and <a href=\"https://spoonacular.com/recipes/salmon-and-summer-veggies-in-foil-987511\">Salmon and Summer Veggies in Foil</a>.</p>
+        <label>Intolerances: </label>
+        <div class="intolerances">
+            <% m.intolerances.forEach(function(i){ %>
+
+            <div>
+                <input type="checkbox" <% if (u.searches.length) { %>
+                    <%= (u.searches[0].intolerances.includes(i)) ? 'checked' : '' %> <% } %> name="cuisine"
+                    value="<%= i %>"> <%= i %>
+            </div>
+            <% }) %>
+        </div>
+        <hr>
+
+        <label>Meal Type: </label>
+        <div class="meal-type">
+            <% m.mealType.forEach(function(meal){ %>
+            <div>
+                <input type="checkbox" <% if (u.searches.length) { %>
+                    <%= (u.searches[0].mealType.includes(meal)) ? 'checked' : '' %> <% } %> name="cuisine"
+                    value="<%= meal %>"> <%= meal %>
+            </div>
+            <% }) %>
+        </div>
+        <hr>
+        <button type="submit" class="btn btn-primary mb-2">Get Recipes</button>
+    </form>
 
 </section>
-
-
 <%- include('../partials/footer') %>

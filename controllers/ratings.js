@@ -22,7 +22,6 @@ function create(req,res,next){
 };
 
 function update(req,res,next){
-    console.log(5,'ekalsen')
     User.findById(req.user._id, function(e,u){
         Recipe.findById(req.params.recId, function(e,r){
             ratingId = u.ratings.filter(element => r.ratings.includes(element));

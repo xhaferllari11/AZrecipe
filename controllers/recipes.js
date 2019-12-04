@@ -32,7 +32,6 @@ function show(req, res, next) {
     Recipe.findById(req.params.recId, function (e, r) {
         User.findById(req.user._id, function(e,u){
             ratingId = r.ratings.filter(element => u.ratings.includes(element));
-            console.log(2,ratingId);
             if (ratingId.length) {
                 Rating.findById(ratingId[0], function(e,rat){
                     res.render('recipes/show', { u, page: fieldHandler, r, rat });
@@ -48,73 +47,6 @@ function show(req, res, next) {
 
 
 
-function getNewRecipes(req, res, next) {
-    //converts API request inputs to arrays
-    let recipeReq = { diet: req.body.diet };
-    recipeReq.cuisine = getArrayReq(req.body.cuisine);
-    recipeReq.intolerances = getArrayReq(req.body.intolerances);
-    recipeReq.mealType = getArrayReq(req.body.meal);
-
-    //checks if same request was made previously and updates offset
-    //finds if similar search was made before and gives offset to update
-    //currently user is not allowed to update search methods because finding
-    //old searches would take too many for loops. Will update later
-    User.findById(req.user._id, function (e, u) {
-        if (u.searches.length > 0) {
-            recipeReq.offset = u.searches[0].offset;
-        } else {
-            recipeReq.offset = 0;
-        }
-        //converts search parameter to API string
-        let APIReqURL = getReqURL(recipeReq);
-        let reqOptions = { url: APIReqURL }
-        request(reqOptions, function (err, response, body) {
-            if (err) {
-                res.render('recipes/new', { u: req.user, e });
-            };
-            rawRecipes = JSON.parse(body);
-            //API returns a large object body and this function converts it to Schema
-            recipes = convertToSchema(rawRecipes);
-            //populte old recipes arr with recipes cooked last week
-            u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
-            u.currRecipes = [];
-
-            let bulkWriteArr = []
-
-            //saves each recipe to database
-            recipes.forEach(function (recipe) {
-                //if recipe already in my db, change reference to that
-                //instead of saving new recipe
-                let newRecObj = {
-                    updateOne: {
-                        filter: { spoonacularId: recipe.spoonacularId },
-                        update: { '$set': recipe },
-                        upsert: true
-                    }
-                }
-                bulkWriteArr.push(newRecObj);
-            });
-            console.log(bulkWriteArr);
-            Recipe.bulkWrite(bulkWriteArr)
-            .then(result => {
-                console.log(result);
-                //updates current recipes with  new ones.
-                //NOTE: if recipe already existed in database from another user it will not update
-                //but can be found using matchedCount
-                console.log(Object.values(result.upsertedIds));
-                var la = Object.values(result.upsertedIds);
-                console.log(typeof(la[0]));
-                u.currRecipes = Object.values(result.upsertedIds);
-                u.searches[0].offset = recipeReq.offset + rawRecipes.number;
-                if (u.searches.length < 1) { u.searches.push(recipeReq); };
-                u.save();
-                res.redirect('/user/recipes/current');
-            });
-        });
-    });
-};
-
-
 // function getNewRecipes(req, res, next) {
 //     //converts API request inputs to arrays
 //     let recipeReq = { diet: req.body.diet };
@@ -128,7 +60,7 @@ function getNewRecipes(req, res, next) {
 //     //old searches would take too many for loops. Will update later
 //     User.findById(req.user._id, function (e, u) {
 //         if (u.searches.length > 0) {
-//             recipeReq.offset = u.searches[0].offset
+//             recipeReq.offset = u.searches[0].offset;
 //         } else {
 //             recipeReq.offset = 0;
 //         }
@@ -146,30 +78,107 @@ function getNewRecipes(req, res, next) {
 //             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
 //             u.currRecipes = [];
 
+//             let bulkWriteArr = []
+
 //             //saves each recipe to database
 //             recipes.forEach(function (recipe) {
 //                 //if recipe already in my db, change reference to that
 //                 //instead of saving new recipe
-//                 Recipe.findOne({ spoonacularId: recipe.spoonacularId }, function (e, r) {
-//                     if (r) {
-//                         u.currRecipes.push(r);
-//                     } else {
-//                         let r = new Recipe(recipe);
-//                         r.save(function (e, rec) {
-//                             if (e) { console.log(111, e); };
-//                             u.currRecipes.push(rec);
-//                         });
-//                     };
-//                 });
+//                 let newRecObj = {
+//                     updateOne: {
+//                         filter: { spoonacularId: recipe.spoonacularId },
+//                         update: { '$set': recipe },
+//                         upsert: true
+//                     }
+//                 }
+//                 bulkWriteArr.push(newRecObj);
 //             });
-//             u.searches[0].offset = recipeReq.offset + rawRecipes.number;
-//             if (u.searches.length < 1) { u.searches.push(recipeReq); };
-//             //will need to change this to include promises, development only
-//             setTimeout(() => u.save(), 2000);
+//             console.log(bulkWriteArr);
+//             Recipe.bulkWrite(bulkWriteArr)
+//             .then(result => {
+//                 console.log(result);
+//                 //updates current recipes with  new ones.
+//                 //NOTE: if recipe already existed in database from another user it will not update
+//                 //but can be found using matchedCount
+//                 console.log(Object.values(result.upsertedIds));
+//                 var la = Object.values(result.upsertedIds);
+//                 console.log(typeof(la[0]));
+//                 u.currRecipes = Object.values(result.upsertedIds);
+//                 u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+//                 if (u.searches.length < 1) { u.searches.push(recipeReq); };
+//                 u.save();
+//                 res.redirect('/user/recipes/current');
+//             });
 //         });
 //     });
-//     res.redirect('/user/recipes/new');
 // };
+
+
+function getNewRecipes(req, res, next) {
+    //converts API request inputs to arrays
+    let recipeReq = { diet: req.body.diet };
+    recipeReq.cuisine = getArrayReq(req.body.cuisine);
+    recipeReq.intolerances = getArrayReq(req.body.intolerances);
+    recipeReq.mealType = getArrayReq(req.body.meal);
+
+    //checks if same request was made previously and updates offset
+    //finds if similar search was made before and gives offset to update
+    //currently user is not allowed to update search methods because finding
+    //old searches would take too many for loops. Will update later
+    User.findById(req.user._id, function (e, u) {
+        if (u.searches.length > 0) {
+            recipeReq.offset = u.searches[0].offset
+        } else {
+            recipeReq.offset = 0;
+        }
+        //converts search parameter to API string
+        let APIReqURL = getReqURL(recipeReq);
+        let reqOptions = { url: APIReqURL }
+        request(reqOptions, function (err, response, body) {
+            if (err) {
+                res.render('recipes/new', { u: req.user, e });
+            };
+            rawRecipes = JSON.parse(body);
+            //API returns a large object body and this function converts it to Schema
+            recipes = convertToSchema(rawRecipes);
+            //populte old recipes arr with recipes cooked last week
+            u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
+            u.currRecipes = [];
+
+            let recPromises = [];
+            //saves each recipe to database
+            for (let i=0;i<recipes.length;i++){
+                //if recipe already in my db, change reference to that
+                //instead of saving new recipe
+                recPromises.push(Recipe.findOne({spoonacularId: recipes[i].spoonacularId}));
+            }
+            Promise.all(recPromises)
+            .then(function(results){
+                let newRecPromises = []
+                for (let i=0;i<results.length;i++){
+                    if (results[i]){
+                        u.currRecipes.push(results[i]);
+                    } else {
+                        let r = new Recipe(recipes[i]);
+                        newRecPromises.push(r.save());
+                    }
+                }
+                return Promise.all(newRecPromises);
+            }).then(function(results){
+                results.forEach(function(result){
+                    u.currRecipes.push(result);
+                });
+                u.searches[0].offset = recipeReq.offset + rawRecipes.number;
+                if (u.searches.length < 1) { u.searches.push(recipeReq); };
+                return u.save();
+            }).then(function(result){
+                res.redirect('/user/recipes/current');
+            });
+        });
+    });
+};
+
+
 
 module.exports = {
     showNew,

@@ -1,9 +1,12 @@
 <%- include('../partials/header') %>
 <%- include('../partials/nav') %>
-<h1><%= page%> recipes</h1>
 
 <% var pg = (page == 'currRecipes') ? 'current' : 'previous' %>
-<div style="display: flex; flex-wrap: wrap;">
+
+<section style="text-align: center;">
+<h1 style="color: white;"><%= pg%> recipes</h1>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
     <% u[page].forEach(function(r){ %>
     <div class="card" style="max-width: 400px; margin: 2%">
         <img class="card-img-top" src="<%= r.image%>" alt="Card image cap">
@@ -17,5 +20,6 @@
     </div>
     <% }) %>
 </div>
+</section>
 
 <%- include('../partials/footer') %>

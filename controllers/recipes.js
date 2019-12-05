@@ -10,10 +10,10 @@ const request = require('request');
 require('dotenv').config();
 
 const meals = {
-    cuisines: ['African','American','British','Cajun','Caribbean','Chinese','Eastern European','European','French','German','Greek','Indian','Irish','Italian','Japanese','Jewish','Korean','Latin American','Mediterranean','Mexian','Middle Eastern','Spanish','Thai','Vietnamese'],
-    diet: ['Gluten Free','Ketogenic','Vegetarian','Vegan','Pescetarian','Paleo','Whole30'],
-    intolerances: ['Dairy','Egg','Gluten','Grain','Peanut','Seafood','Sesame','Shellfish','Soy','Sulfite','Tree nut','Wheat'],
-    mealType: ['Main Course','Soup','Dessert']
+    cuisines: ['African', 'American', 'British', 'Cajun', 'Caribbean', 'Chinese', 'Eastern European', 'European', 'French', 'German', 'Greek', 'Indian', 'Irish', 'Italian', 'Japanese', 'Jewish', 'Korean', 'Latin American', 'Mediterranean', 'Mexian', 'Middle Eastern', 'Spanish', 'Thai', 'Vietnamese'],
+    diet: ['Gluten Free', 'Ketogenic', 'Vegetarian', 'Vegan', 'Pescetarian', 'Paleo', 'Whole30'],
+    intolerances: ['Dairy', 'Egg', 'Gluten', 'Grain', 'Peanut', 'Seafood', 'Sesame', 'Shellfish', 'Soy', 'Sulfite', 'Tree nut', 'Wheat'],
+    mealType: ['Main Course', 'Soup', 'Dessert']
 }
 const angjelaId = '5de815626d613a00173b960a';
 var recipesPerCall = 1;
@@ -35,9 +35,10 @@ function index(req, res, next) {
 
 function show(req, res, next) {
     let fieldHandler = (req.params.currpre == 'current') ? 'currRecipes' : 'oldRecipes';
-    Recipe.findById(req.params.recId, function (e, r) {
-        User.findById(req.user._id, function (e, u) {
-            ratingId = r.ratings.filter(element => u.ratings.includes(element));
+    User.findById(req.user._id, function (e, u) {
+        Recipe.findById(req.params.recId).populate('ratings')
+        .exec(function (e, r) {
+            ratingId = r.ratings.filter(element => u.ratings.includes(element._id));
             if (ratingId.length) {
                 Rating.findById(ratingId[0], function (e, rat) {
                     res.render('recipes/show', { u, page: fieldHandler, r, rat });
@@ -194,7 +195,8 @@ module.exports = {
     showNew,
     create: getNewRecipes,
     index,
-    show
+    show,
+    meals
 }
 
 
@@ -220,8 +222,8 @@ function getReqURL(reqField) {
             reqURL = `${reqURL}&diet=${reqField['diet']}`
         } else if (option === 'offset') {
             reqURL = `${reqURL}&offset=${reqField.offset}`
-        } else if (option == 'cuisine' || 
-        option == 'intolerances' || option == 'mealType') {
+        } else if (option == 'cuisine' ||
+            option == 'intolerances' || option == 'mealType') {
             if (reqField[option].length) {
                 reqURL = `${reqURL}&${option}=`
                 for (let i = 0; i < reqField[option].length; i++) {
@@ -230,7 +232,7 @@ function getReqURL(reqField) {
                         reqURL = reqURL + ',';
                     }
                 }
-            } 
+            }
         }
     }
     return reqURL;

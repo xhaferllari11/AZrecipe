@@ -1,18 +1,8 @@
-<%- include('../partials/header') %>
-<%- include('../partials/nav') %>
-<hr>
+<%- include('./partials/header') %>
+<%- include('./partials/nav') %>
+
 <section style="color: white;">
-    <% if (e) { %>
-    <h5>Spoontacular API sent back the following error:</h5>
-    <h6><%= e.message %></h6>
-    <% } %>
-
     <% if (u.searches.length) { %>
-    <h5>We pre-poulated your preferences, just hit 'Get Recipes'</h5>
-    <% } else { %>
-    <h5>Select your preferences for recipes.</h5>
-    <% } %>
-
     <form class="new-recipe" action="/user/recipes/new" method="POST">
         <hr>
         <label>Diet: </label>
@@ -64,8 +54,11 @@
             <% }) %>
         </div>
         <hr>
-        <button type="submit" class="btn btn-primary mb-2">Get Recipes</button>
     </form>
+    <% } else { %>
+        <h2>Prefences are made when you get your first new recipe. Click on Recipes / Get New Recipes.</h2>
+        <h6>Note: once you make your first request, preferences cannot be changed again.</h6>
+    <% } %>
 
 </section>
-<%- include('../partials/footer') %>
+<%- include('./partials/footer') %>

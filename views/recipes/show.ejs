@@ -4,8 +4,8 @@
 <% var pg = (page == 'currRecipes') ? 'current' : 'previous' %>
 
 <!-- Page Content -->
-<div class="container">
-    <div class="row">
+<div class="container" style="text-align: center;">
+    <div class="row justify-content-md-center">
         <div class="col-lg-9">
             <div class="card mt-4">
                 <img class="card-img-top img-fluid" src="<%= r.image %>" alt="">
@@ -15,6 +15,14 @@
                         <% r.dishTypes.forEach(function(t,idx){ %>
                         <small><%= t %></small>
                         <% if (idx !== (r.dishTypes.length-1)) { %>
+                        <small>|</small>
+                        <% } %>
+                        <% }) %>
+                    </h5>
+                    <h5>Cuisine:
+                        <% r.cuisines.forEach(function(c,idx){ %>
+                        <small><%= c %></small>
+                        <% if (idx !== (r.cuisines.length-1)) { %>
                         <small>|</small>
                         <% } %>
                         <% }) %>
@@ -30,13 +38,12 @@
                 <div class="card-header">
                     Ingredients
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="text-align: left;">
                     <ul class="list-group">
                         <% r.ingredients.forEach(function(i){ %>
                         <li class="list-group-item"><%= i.originalString %></li>
                         <%  }) %>
                     </ul>
-                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
                 </div>
             </div>
 
@@ -44,7 +51,14 @@
                 <div class="card-header">
                     Directions
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="text-align: left;">
+
+                    <h6>
+                        Serves: <small><%= r.servings%></small>
+                    </h6>
+                    <h6>
+                        Cooks in: <small><%= r.readyInMinutes%> minutes</small>
+                    </h6>
                     <ol>
                         <% r.instructions.forEach(function(i){ %>
                         <li><%= i %></li>
@@ -53,19 +67,17 @@
                     <small class="text-muted">Posted by Anonymous on 3/1/17</small>
                     <hr>
 
-                    <form action= "/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=PUT":"" %>" method="POST">
+                    <form action="/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=PUT":"" %>" method="POST">
                         <p>
                             <% if (rat) { %>
                             Update rating:
                             <% } else { %>
-                                Rate this Recipe:
-                               <% } %>
+                            Rate this Recipe:
+                            <% } %>
                             <span class="starRating">
                                 <% for (let i=5; i>0; i--) { %>
-                                <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>" 
-                                <% if (rat) { %>
-                                    <%= (i == rat.rating) ? "checked" : "" %>
-                                   <% } %> >
+                                <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>" <% if (rat) { %>
+                                    <%= (i == rat.rating) ? "checked" : "" %> <% } %>>
                                 <label for="rating<%=i%>"><%=i%></label>
                                 <% } %>
                             </span>
@@ -78,7 +90,7 @@
 
                     <p style="margin-top: 5%;">
                         <% if (rat) { %>
-                        <strong>Your current rating:</strong> 
+                        <strong>Your current rating:</strong>
                         <span class="starRating">
                             <% for (let i=5; i>0; i--) { %>
                             <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>"
@@ -86,29 +98,33 @@
                             <label for="rating<%=i%>"><%=i%></label>
                             <% } %>
                         </span>
-                        <span><div><%=rat.comment%></div> </span>
+                        <span>
+                            <div><%=rat.comment%></div>
+                        </span>
                         <% } %>
                     </p>
+
+                    <!-- <p style="margin-top: 5%;">
+                            <strong>Other Ratings:</strong>
+                        <% if (rat) { %>
+                        <span class="starRating">
+                            <% for (let i=5; i>0; i--) { %>
+                            <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>"
+                                <%= (i == rat.rating) ? "checked" : "" %>>
+                            <label for="rating<%=i%>"><%=i%></label>
+                            <% } %>
+                        </span>
+                        <span>
+                            <div><%=rat.comment%></div>
+                        </span>
+                        <% } %>
+                    </p> -->
+
+
                 </div>
             </div>
-            <!-- /.card -->
-
         </div>
-        <!-- /.col-lg-9 -->
-
-        <div class="col-lg-3">
-            <h1 class="my-4">Shop Name</h1>
-            <div class="list-group">
-                <a href="#" class="list-group-item active">Category 1</a>
-                <a href="#" class="list-group-item">Category 2</a>
-                <a href="#" class="list-group-item">Category 3</a>
-            </div>
-        </div>
-        <!-- /.col-lg-3 -->
     </div>
-
 </div>
-<!-- /.container -->
-
 
 <%- include('../partials/footer') %>

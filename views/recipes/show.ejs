@@ -101,24 +101,16 @@
                         <span>
                             <div><%=rat.comment%></div>
                         </span>
-                        <% } %>
+                        <form class="form-inline" action="/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=DELETE":"" %>"
+                            method="POST">
+                            <button type="submit" class="btn btn-danger btn-inline-block">
+                                Delete Rating
+                            </button>
+                            
+                            <% } %>
                     </p>
 
-                    <!-- <p style="margin-top: 5%;">
-                            <strong>Other Ratings:</strong>
-                        <% if (rat) { %>
-                        <span class="starRating">
-                            <% for (let i=5; i>0; i--) { %>
-                            <input id="rating<%=i%>" type="radio" name="rating" value="<%=i%>"
-                                <%= (i == rat.rating) ? "checked" : "" %>>
-                            <label for="rating<%=i%>"><%=i%></label>
-                            <% } %>
-                        </span>
-                        <span>
-                            <div><%=rat.comment%></div>
-                        </span>
-                        <% } %>
-                    </p> -->
+                    <!-- Will need to display other people's ratings here; -->
 
 
                 </div>

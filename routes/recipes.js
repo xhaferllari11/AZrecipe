@@ -10,6 +10,8 @@ router.get('/:currpre', isLoggedIn, recipeCtrl.index);
 router.get('/:currpre/:recId', isLoggedIn, recipeCtrl.show);
 router.post('/:currpre/:recId', isLoggedIn, ratingCtrl.create);
 router.put('/:currpre/:recId', isLoggedIn, ratingCtrl.update);
+router.delete('/:currpre/:recId', isLoggedIn, ratingCtrl.delete);
+
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) return next();

@@ -46,7 +46,24 @@ function update(req,res,next){
     });
 }
 
+function delRating(req,res){
+    User.findById(req.user._id, function(e,u){
+        Recipe.findById(req.params.recId, function(e,r){
+            ratingId = u.ratings.filter(element => r.ratings.includes(element));
+            Rating.findByIdAndRemove(ratingId, function(e){
+                r.ratings.pop(ratingId);
+                u.ratings.pop(ratingId);
+                Promise.all([r.save(),u.save()])
+                .then(function(results){
+                    res.redirect(`/user/recipes/${req.params.currpre}/${req.params.recId}`);
+                });
+            });
+        });
+    });
+}
+
 module.exports = {
     create,
-    update
+    update,
+    delete: delRating
 }

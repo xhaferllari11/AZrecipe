@@ -17,7 +17,7 @@
         <hr>
         <label>Diet: </label>
         <select name="diet" required>
-            <option value="" disabled>Select Diet</option>
+            <option value="" disabled <%= (u.searches.length==0) ?  "selected" : "" %>  > Select Diet</option>
             <% m.diet.forEach(function(d){ %>
             <option <% if (u.searches.length) { %> <%= (d == u.searches[0].diet) ? "selected" : "" %> <% } %>
                 value="<%=d%>"><%=d%>

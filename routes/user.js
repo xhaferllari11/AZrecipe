@@ -19,6 +19,13 @@ router.get('/preferences', isLoggedIn, function (req, res, next) {
     })
 });
 
+router.get('/profile', isLoggedIn, function (req, res, next) {
+  User.findById(req.user._id)
+    .exec(function (e, u) {
+      res.render('userProfile', { u });
+    })
+});
+
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect('/auth/google')

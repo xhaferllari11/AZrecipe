@@ -51,8 +51,8 @@ function delRating(req,res){
         Recipe.findById(req.params.recId, function(e,r){
             ratingId = u.ratings.filter(element => r.ratings.includes(element));
             Rating.findByIdAndRemove(ratingId, function(e){
-                r.ratings.pop(ratingId);
-                u.ratings.pop(ratingId);
+                r.ratings.splice(u.ratings.findIndex(el => (el._id ==ratingId[0])),1);
+                u.ratings.splice(u.ratings.findIndex(el => (el._id ==ratingId[0])),1);
                 Promise.all([r.save(),u.save()])
                 .then(function(results){
                     res.redirect(`/user/recipes/${req.params.currpre}/${req.params.recId}`);

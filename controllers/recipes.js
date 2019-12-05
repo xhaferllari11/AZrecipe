@@ -39,8 +39,10 @@ function show(req, res, next) {
         Recipe.findById(req.params.recId).populate('ratings')
         .exec(function (e, r) {
             ratingId = r.ratings.filter(element => u.ratings.includes(element._id));
+            console.log(1,ratingId);
             if (ratingId.length) {
                 Rating.findById(ratingId[0], function (e, rat) {
+                    r.ratings.splice(u.ratings.findIndex(el => (el._id == ratingId[0])),1);
                     res.render('recipes/show', { u, page: fieldHandler, r, rat });
                 });
             } else {

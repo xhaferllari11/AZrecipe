@@ -16,7 +16,7 @@ const meals = {
     mealType: ['Main Course', 'Soup', 'Dessert']
 }
 const angjelaId = '5de815626d613a00173b960a';
-var recipesPerCall = 1;
+var recipesPerCall = 7;
 var spBase;
 
 

@@ -17,7 +17,7 @@ const meals = {
 }
 const angjelaId = '5de815626d613a00173b960a';
 const umichId = '5de9598428eba70017555ecf';
-var recipesPerCall = 3;
+var recipesPerCall = 5;
 var spBase;
 
 

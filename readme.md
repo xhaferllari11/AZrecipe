@@ -44,3 +44,7 @@ On recipe show page, there is ingredients, instructions, and details. User also 
 The user rating (along with spoonacular rating) will be used to build a model for the user to recommend better recipes.
 
 
+### Screenshots
+
+![](config/screenshot1.png)
+![](config/screenshot2.png)

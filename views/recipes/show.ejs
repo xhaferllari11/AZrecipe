@@ -98,15 +98,16 @@
                             <label for="rating<%=i%>"><%=i%></label>
                             <% } %>
                         </span>
-                        <span>
-                            <div><%=rat.comment%></div>
-                        </span>
-                        <form class="form-inline"
-                            action="/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=DELETE":"" %>"
-                            method="POST">
-                            <button type="submit" class="btn btn-danger btn-inline-block">
+                        <form class="form-inline" style="display: inline;"
+                        action="/user/recipes/<%= pg %>/<%= r._id %><%= (rat) ? "?_method=DELETE":"" %>"
+                        method="POST">
+                        
+                            <span><%=rat.comment%></span>
+                        
+                            <button type="submit" class="btn btn-danger btn-inline">
                                 Delete Rating
                             </button>
+                        </form>
                             <% } %>
                     </p>
 

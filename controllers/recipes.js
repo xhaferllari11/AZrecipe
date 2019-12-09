@@ -1,8 +1,3 @@
-//currently working with model where user selects preferences and intolerances
-//and all recipes afterwards follow those preferences/intolerances
-//however, i am setting up code so user is able to change preferences/intolerances/meals
-//over time
-
 const User = require('../models/user');
 const Recipe = require('../models/recipe');
 const Rating = require('../models/rating');
@@ -74,7 +69,6 @@ function getNewRecipes(req, res, next) {
             recipeReq.mealType = getArrayReq(req.body.meal);
         }
 
-        //converts search parameter to API string
         let APIReqURL = getReqURL(recipeReq);
         let reqOptions = { url: APIReqURL }
         request(reqOptions, function (err, response, body) {
@@ -84,15 +78,13 @@ function getNewRecipes(req, res, next) {
             rawRecipes = JSON.parse(body);
             //API returns a large object body and this function converts it to Schema
             recipes = convertToSchema(rawRecipes);
-            //populte old recipes arr with recipes cooked last week
+
             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
             u.currRecipes = [];
 
             let recPromises = [];
-            //saves each recipe to database
             for (let i = 0; i < recipes.length; i++) {
                 //if recipe already in my db, change reference to that
-                //instead of saving new recipe
                 recPromises.push(Recipe.findOne({ spoonacularId: recipes[i].spoonacularId }));
             }
             Promise.all(recPromises)

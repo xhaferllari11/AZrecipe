@@ -3,8 +3,6 @@ var router = express.Router();
 const User = require('../models/user');
 const m = require('../controllers/recipes').meals;
 
-/* GET users listing. */
-
 router.get('/', isLoggedIn, function (req, res, next) {
   User.findById(req.user._id).populate('currRecipes')
     .exec(function (e, u) {

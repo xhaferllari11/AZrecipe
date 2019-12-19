@@ -58,8 +58,8 @@
             <% m.mealType.forEach(function(meal){ %>
             <div>
                 <input type="checkbox" <% if (u.searches.length) { %>
-                    <%= (u.searches[0].mealType.includes(meal)) ? 'checked' : '' %> <% } %> name="meal"
-                    value="<%= meal %>"> <%= meal %>
+                    <%= (u.searches[0].mealType.includes(meal)) ? 'checked' : '' %> <% } %>
+                    name="meal" value="<%= meal %>"> <%= meal %>
             </div>
             <% }) %>
         </div>

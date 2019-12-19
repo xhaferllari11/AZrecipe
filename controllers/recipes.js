@@ -48,8 +48,6 @@ function show(req, res, next) {
 }
 
 function getNewRecipes(req, res, next) {
-    console.log(2, req.user._id);
-    console.log(5, req.body)
     //converts API request inputs to arrays
     User.findById(req.user._id, function (e, u) {
         recipesPerCall = (req.user._id == angjelaId 
@@ -107,8 +105,6 @@ function getNewRecipes(req, res, next) {
                     });
                     if (u.searches.length < 1) { u.searches.push(recipeReq); };
                     u.searches[0].offset = recipeReq.offset + rawRecipes.number;
-                    console.log(3, u.searches[0]);
-                    console.log(4, u.searches[0].mealType)
                     return u.save();
                 }).then(function (result) {
                     res.redirect('/user/recipes/current');
@@ -153,7 +149,12 @@ function getReqURL(reqField) {
         } else if (option == 'cuisine' ||
             option == 'intolerances' || option == 'mealType') {
             if (reqField[option].length) {
-                reqURL = `${reqURL}&${option}=`
+                //spoonacular wanted 'type' not 'mealType'
+                if (option == 'mealType') {
+                    reqURL = `${reqURL}&${'type'}=`
+                } else {
+                    reqURL = `${reqURL}&${option}=`
+                }
                 for (let i = 0; i < reqField[option].length; i++) {
                     reqURL = `${reqURL}${reqField[option][i]}`
                     if (i !== reqField[option].length - 1) {

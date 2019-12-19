@@ -48,7 +48,6 @@ function show(req, res, next) {
 }
 
 function getNewRecipes(req, res, next) {
-    //converts API request inputs to arrays
     User.findById(req.user._id, function (e, u) {
         recipesPerCall = (req.user._id == angjelaId 
             || req.user._id == umichId) ? 7 : recipesPerCall;
@@ -76,7 +75,6 @@ function getNewRecipes(req, res, next) {
                 res.render('recipes/new', { u: req.user, e });
             };
             rawRecipes = JSON.parse(body);
-            //API returns a large object body and this function converts it to Schema
             recipes = convertToSchema(rawRecipes);
 
             u.oldRecipes = u.oldRecipes.concat(u.currRecipes);
@@ -95,6 +93,7 @@ function getNewRecipes(req, res, next) {
                             u.currRecipes.push(results[i]);
                         } else {
                             let r = new Recipe(recipes[i]);
+                            //if recipe was not in database, this saves it to db
                             newRecPromises.push(r.save());
                         }
                     }
@@ -113,8 +112,6 @@ function getNewRecipes(req, res, next) {
     });
 };
 
-
-
 module.exports = {
     showNew,
     create: getNewRecipes,
@@ -123,9 +120,9 @@ module.exports = {
     meals
 }
 
-
 //converts the form inputs into arrays as neccessary,
 //some form inputs don't come in if user didn't select any
+//others as string if user only selected one
 function getArrayReq(reqField) {
     if (reqField) {
         if (typeof (reqField) === 'string') {
@@ -150,6 +147,7 @@ function getReqURL(reqField) {
             option == 'intolerances' || option == 'mealType') {
             if (reqField[option].length) {
                 //spoonacular wanted 'type' not 'mealType'
+                //changing would require schema/databse change so i added this line
                 if (option == 'mealType') {
                     reqURL = `${reqURL}&${'type'}=`
                 } else {

@@ -2,9 +2,6 @@ const User = require('../models/user');
 const Recipe = require('../models/recipe');
 const Rating = require('../models/rating');
 
-
-
-
 function create(req,res,next){
     User.findById(req.user._id, function(e,u){
         Recipe.findById(req.params.recId, function(e,r){
@@ -30,7 +27,7 @@ function update(req,res,next){
                 Rating.findByIdAndUpdate(ratingId[0],req.body,function(){
                     res.redirect(`/user/recipes/${req.params.currpre}/${req.params.recId}`);
                 })
-                // In case comment is not matched, this is for production only
+                // In case comment is not matched
             } else {
                 Rating.create(req.body, function(e,rat){
                     u.ratings.push(rat);

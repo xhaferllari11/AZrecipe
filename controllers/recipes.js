@@ -74,7 +74,6 @@ function getNewRecipes(req, res, next) {
             if (err) {
                 res.render('recipes/new', { u: req.user, e });
             };
-            console.log(body);
             rawRecipes = JSON.parse(body);
             recipes = convertToSchema(rawRecipes);
 

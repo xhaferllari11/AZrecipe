@@ -1,6 +1,13 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('/images/home-page-photo.jpeg'); 
+  background-size: cover;
+  background-position: center center;
+  margin: 0 5%;
+  background-repeat: no-repeat;
+  min-height: 800px;
+  background-attachment: fixed;
 }
 
 a {
@@ -53,7 +60,11 @@ div.dashboard-ingredients-display section{
   }
 }
 
-
+@media (max-width: 200px) {
+  body{
+    min-height: 500px;
+  }
+}
 
 
 .starRating:not(old){

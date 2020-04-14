@@ -51,6 +51,49 @@ div.dashboard-ingredients-display section{
   width: 50%;
 }
 
+.image-holders{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image-holders div {
+  height: 230px;
+  width: 230px;
+  margin: 2%;
+  position: relative;
+}
+
+.image-holders div img {
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.image-holders div div {
+  height: 200px;
+  width: 200px;
+  background-color:rgb(199, 151, 139, .2);
+  border-radius: 10%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.image-holders div div img {
+  z-index: 0;
+  height: 200px;
+  width: 200px;
+}
+
+
+
+
+
+
+
 @media (max-width: 992px) {
   div.dashboard-ingredients-display{
     flex-direction: column;

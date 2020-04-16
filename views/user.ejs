@@ -1,16 +1,53 @@
 <%- include('./partials/header') %>
 <%- include('./partials/nav') %>
 
-<div style="background-color: rgb(110,155,176, .75);
-padding: 1% 2%; margin-top: 2%; border-radius: 10px;">
-<h1>Hello, <%= (u) ? u.name : 'please log in'%></h1>
+<div class="dashboard-container">
+    <h1 style="text-align: center;">Hello, <%= (u) ? u.name : 'please log in'%></h1>
 
-<!-- Page Content -->
-<div class="dashboard-ingredients-display">
-
-    <section>
+    <!-- Page Content -->
+    <div class="dashboard-ingredients-display">
+        <div class="dashboard-recipe-holder">
             <h5 class="my-4">This weeks ingredients</h5>
+            <h5 class="my-4">This weeks recipes</h5>
+        </div>
+        <% u.currRecipes.forEach(function(r){ %>
+        <div class="dashboard-recipe-holder">
+            <div class="card card-outline-secondary my-4 ingredient-holder">
+                <div class="card-header">
+                    <%= r.title %>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <% r.ingredients.forEach(function(i){ %>
+                        <li class="list-group-item"><%= i.originalString %></li>
+                        <%  }) %>
+                    </ul>
+                </div>
+            </div>
 
+            <div class="recipe-info-holder">
+                <div class="col-md-7">
+                    <a href="/user/recipes/current/<%=r._id%>">
+                        <img class="dashboard-imgs" src="<%= r.image %>" alt="">
+                    </a>
+                </div>
+                <div class="col-md-7 recipe-title-and-btn">
+                    <h3 class="dashboard-titles"><%= r.title %></h3>
+                    <p></p>
+                    <a class="btn btn-primary" href="/user/recipes/current/<%=r._id%>">View Recipe</a>
+                </div>
+            </div>
+        </div>
+        <%  }) %>
+
+
+
+
+
+
+
+        <!-- <section>
+            <h5 class="my-4">This weeks ingredients</h5>
             <% u.currRecipes.forEach(function(r){ %>
         <div class="card card-outline-secondary my-4">
             <div class="card-header">
@@ -29,11 +66,10 @@ padding: 1% 2%; margin-top: 2%; border-radius: 10px;">
 
     <section>
         <div class="container">
-            <!-- Page Heading -->
             <h5 class="my-4">This weeks recipes</h5>
             <hr>
             <% u.currRecipes.forEach(function(r){ %>
-            <!-- Project One -->
+        
             <div class="row">
                 <div class="col-md-7">
                     <a href="/user/recipes/current/<%=r._id%>">
@@ -46,14 +82,14 @@ padding: 1% 2%; margin-top: 2%; border-radius: 10px;">
                     <a class="btn btn-primary" href="/user/recipes/current/<%=r._id%>">View Recipe</a>
                 </div>
             </div>
-            <!-- /.row -->
+          
             <hr>
             <% }) %>
 
         </div>
-    </section>
+    </section> -->
 
-</div>
+    </div>
 </div>
 
 <%- include('./partials/footer') %>

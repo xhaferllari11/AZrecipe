@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding-top: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-image: url('/images/home-page-photo.jpeg'); 
   background-size: cover;
@@ -42,15 +42,44 @@ form.new-recipe div.meal-type {
   flex-wrap: wrap;
 }
 
+
+/* Dashboard */
 div.dashboard-ingredients-display{
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
+  /* align-items: center; */
 }
 
-div.dashboard-ingredients-display section{
-  width: 50%;
+div.dashboard-ingredients-display div.dashboard-recipe-holder{
+  display: flex;
+  justify-content: center;
+  width: 95%;
 }
 
+.dashboard-recipe-holder div.ingredient-holder { 
+  width: 40%;
+}
+
+.dashboard-recipe-holder div.recipe-info-holder {
+  width: 40%;
+}
+
+.dashboard-imgs {
+  margin-top: 25px;
+  width: 300px;
+  border-radius: 2%;
+}
+
+.dashboard-titles {
+  /* color: red; */
+}
+
+.recipe-title-and-btn{
+  text-align: center;
+}
+
+/* Recipe Pages */
 .image-holders{
   display: flex;
   flex-wrap: wrap;
@@ -89,9 +118,32 @@ div.dashboard-ingredients-display section{
 }
 
 
+.dashboard-container {
+  /* background-color: rgb(110,155,176, .75); */
+  background-color:rgb(199, 151, 139, .4);
+  padding: 1% 2%;
+  margin-top: 2%;
+  border-radius: 10px;
+}
 
 
 
+/* recipe index */
+.recipe-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  background-color: rgb(199, 151, 139, .2);
+}
+
+.recipe-card-holder {
+  width: 300px;
+  margin: 2%
+}
+
+.card-img-top {
+  width: 300px;
+}
 
 
 @media (max-width: 992px) {

@@ -1,18 +1,17 @@
 <%- include('../partials/header') %>
 <%- include('../partials/nav') %>
 
-<% var pg = (page == 'currRecipes') ? 'current' : 'previous' %>
+<% var pg = (page == 'currRecipes') ? 'Current' : 'Previous' %>
 
 <section style="text-align: center;">
-<h1 style="color: white;"><%= pg%> recipes</h1>
+<h1 style="color: white;"><%= pg%> Recipes</h1>
 
-<div style="display: flex; flex-wrap: wrap; justify-content: space-evenly;">
+<div class="recipe-container">
     <% u[page].forEach(function(r){ %>
-    <div class="card" style="max-width: 400px; margin: 2%">
+    <div class="card recipe-card-holder">
         <img class="card-img-top" src="<%= r.image%>" alt="Card image cap">
         <div class="card-body">
             <h5 class="card-title"><a href="/user/recipes/<%=pg%>/<%= r._id%>"><%= r.title%> </a></h5>
-            <!-- <p class="card-text">Description</p> -->
         </div>
         <div class="card-footer">
             <small class="text-muted">Rating</small>
